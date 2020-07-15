@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>ES6语法回顾</title>
+    <style>
+        img{
+            width: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        // event loop
+        // 同步优先异步执行
+        // 异步任务队列里面，微任务优先于宏任务
+        console.log(1);
+
+        setTimeout(() => {
+            console.log(2);
+            Promise.resolve().then(() => {
+                console.log(3)
+            });
+        }, 0);
+
+        new Promise((resolve, reject) => {
+            console.log(4)
+            resolve(5)
+        }).then((data) => {
+            console.log(data);
+
+            Promise.resolve().then(() => {
+                console.log(6)
+            }).then(() => {
+                console.log(7)
+
+                setTimeout(() => {
+                    console.log(8)
+                }, 0);
+            });
+        })
+
+        setTimeout(() => {
+            console.log(9);
+        })
+
+        console.log(10);
+
+        // Promise
+        function loadImg(src){
+            return new Promise((resolve, reject)=>{
+                let img = new Image();
+                img.src = src;
+                img.onload = function(){
+                    resolve(img)
+                }
+                img.onerror = function(){
+                    reject(img)
+                }
+            })
+        }
+
+        const imgs = [
+            'https://t7.baidu.com/it/u=3204887199,3790688592&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1595408552&t=8efa85139c7f1a9ec9d9c0a841bbcfee',
+            'https://t9.baidu.com/it/u=3363001160,1163944807&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1595408552&t=be4e1aed1b1084339044389aefb4b3c2',
+            'https://t9.baidu.com/it/u=1307125826,3433407105&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1595408552&t=10f3011f181ebe7da0f81ec944ed3b94',
+            'https://t8.baidu.com/it/u=2247852322,986532796&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1595408552&t=1ceff739bc3e042665681fc8645c73a8',
+            'https://t9.baidu.com/it/u=86853839,3576305254&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1595408552&t=41d32fbeb5575e8459838c9b57a4d017',
+            'https://t8.baidu.com/it/u=1484500186,1503043093&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1595408552&t=ef3df5648af1ffa0eb8db6dd4be9a4f3',
+            '',
+            './assets/1.jpg',
+            './assets/2.jpg',
+            './assets/3.jpg',
+            './assets/4.jpg'
+        ];
+
+        // 一个接着一个渲染
+        // loadImg(imgs[0])
+        // .then(res=>{
+        //     document.body.appendChild(res);
+        //     return loadImg(imgs[1])
+        // })
+        // .then(res=>{
+        //     document.body.appendChild(res);
+        //     return loadImg(imgs[2])
+        // })
+        // .then(res=>{
+        //     document.body.appendChild(res);
+        //     return loadImg(imgs[3])
+        // })
+        // .then(res=>{
+        //     document.body.appendChild(res);
+        //     return loadImg(imgs[4])
+        // })
+        // .then(res=>{
+        //     document.body.appendChild(res);
+        //     return loadImg(imgs[5])
+        // })
+        // .then(res=>{
+        //     document.body.appendChild(res);
+        //     return loadImg(imgs[6])
+        // })
+        // .then(res=>{
+        //     document.body.appendChild(res);
+        //     return loadImg(imgs[7])
+        // })
+        // .then(res=>{
+        //     document.body.appendChild(res);
+        //     return loadImg(imgs[8])
+        // })
+        // .then(res=>{
+        //     document.body.appendChild(res);
+        //     return loadImg(imgs[9])
+        // })
+        // .then(res=>{
+        //     document.body.appendChild(res);
+        // })
+
+        // async function loadAll(){
+        //     for (let i=0;i<imgs.length;i++){
+        //         let result = await loadImg(imgs[i])
+        //         document.body.appendChild(result);
+        //     }            
+        // }
+
+        // loadAll();
+
+        async function loadAll(){
+            imgs.forEach(async item=>{
+                try{
+                    let result = await loadImg(item)
+                    document.body.appendChild(result);
+                }catch(e){
+                    
+                }
+            })
+        }
+
+        loadAll();
+
+
+    </script>
+</body>
+
+</html>
