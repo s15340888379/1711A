@@ -2,68 +2,78 @@
     <div>
         <van-tabs v-model="active" animated>
             <van-tab title="待跟进(19)">
-                <li v-for="(item, index) in list" :key="index">
-                    <p>{{`${item.name}  ${item.sex}`}}</p>
-                    <p>{{`案件编号: ${item.case_id}`}}</p>
-                    <p>
-                        <span>产品类型</span>
-                        <span>{{item.type}}</span>    
-                        <a :href="`tel:+${item.phone}`">联系客户</a>
-                    </p>   
-                </li>
+                <phone-list :list="finished" @dailPhone="dailPhone"/>
             </van-tab>
             <van-tab title="已跟进">
-                 <li v-for="(item, index) in list" :key="index">
-                    <p>{{`${item.name}  ${item.sex}`}}</p>
-                    <p>{{`案件编号: ${item.case_id}`}}</p>
-                    <p>
-                        <span>产品类型</span>
-                        <span>{{item.type}}</span>    
-                        <a :href="`tel:+${item.phone}`">联系客户</a>
-                    </p>   
-                </li>
+                <phone-list :list="unfinished" :dailPhone="dailPhone"/>
             </van-tab>
         </van-tabs>
     </div>
 </template>
 
 <script>
+import PhoneList from '@/components/PhoneList'
+
 export default {
+    name: 'phone-urge',
+    components: {
+        PhoneList
+    },
     data(){
         return {
             active: 0,
-            list: [{
-                case_id: 'case_zc_A1912200019',
-                name: '马蕴涛',
-                sex: '男',
-                type: '12-JDBT',
-                phone: '13133809344'
-            },{
-                case_id: 'case_zc_A1912200019',
-                name: '马蕴涛',
-                sex: '男',
-                type: '12-JDBT',
-                phone: '13133809344'
-            },{
-                case_id: 'case_zc_A1912200019',
-                name: '马蕴涛',
-                sex: '男',
-                type: '12-JDBT',
-                phone: '13133809344'
-            },{
-                case_id: 'case_zc_A1912200019',
-                name: '马蕴涛',
-                sex: '男',
-                type: '12-JDBT',
-                phone: '13133809344'
-            },{
-                case_id: 'case_zc_A1912200019',
-                name: '马蕴涛',
-                sex: '男',
-                type: '12-JDBT',
-                phone: '13133809344'
-            }]
+            list: []
         }
+    },
+    methods: {
+        dailPhone(phone){
+            console.log('dail phone...', phone)
+        }
+    },
+    computed: {
+        finished(){
+            return this.list.filter(item=>item.finished)
+        },
+        unfinished(){
+            return this.list.filter(item=>!item.finished)
+        }
+    },
+    watch: {
+        active:function (newVal, oldVal){
+            console.log('arguments...', arguments, newVal, oldVal)
+        }
+    },
+    beforeCreate(){
+
+    },
+    async created(){
+        let result = await this.$axios.get('/phone/list')
+        console.log('result...', result);
+        this.list = result.list;
+    },
+    beforeMount(){
+
+    },
+    mounted(){
+        console.log('mounted', a)
+    },
+    beforeUpdate(){
+
+    },
+    updated(){
+
+    },
+    beforeDestroy(){
+
+    },
+    destroyed(){
+
+    },
+    activated(){
+        console.log('activated...')
+    },
+    deactivated(){
+        console.log('deactivated...')
     }
 }
 </script>

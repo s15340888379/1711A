@@ -1,0 +1,23 @@
+{
+  "defaultSeverity": "warning",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "linterOptions": {
+    "exclude": [
+      "node_modules/**"
+    ]
+  },
+  "rules": {
+    "indent": [true, "spaces", 2],
+    "interface-name": false,
+    "no-consecutive-blank-lines": false,
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "quotemark": [true, "single"],
+    "only-arrow-functions": false, /*去掉只能写箭头函数的限制*/
+    "semicolon": false, /*去掉语句结尾必须加分号的限制*/
+    "trailing-comma": false, /*去掉属性结尾必须加逗号的限制*/
+    "no-console": false /*去掉不允许使用console语句调试*/
+  }
+}
