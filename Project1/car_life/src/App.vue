@@ -1,23 +1,7 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-  </div>
+  <router-view></router-view>
 </template>
 
-<script lang="ts">
-import {defineComponent, onMounted} from '@vue/composition-api'
-import {getBrandList} from '@/api/index'
-
-export default defineComponent({
-  name: 'App',
-  setup(){
-    onMounted(async ()=>{
-      let data = await getBrandList();
-      console.log('data...', data);
-    })
-  }
-});
-</script>
 
 <style lang="scss">
 @import './scss/_mixin.scss';
