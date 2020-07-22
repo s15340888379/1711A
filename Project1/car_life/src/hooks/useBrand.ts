@@ -13,6 +13,7 @@ export default () => {
         letters: $store?.state.home.letters
     })
 
+    console.log('data...', $store, data)
     function getBrandList() {
         $store?.dispatch('home/getBrandList');
     }

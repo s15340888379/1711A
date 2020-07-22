@@ -24,7 +24,7 @@ const mutations = {
                 brandList[letter] = [item];
             }
         })
-        state.brandList = brandList;
+        state.brandList = brandList
         state.letters = letters
     }
 }
