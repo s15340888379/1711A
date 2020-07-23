@@ -4,3 +4,8 @@ import request from '@/util/request'
 export let getBrandList = () => {
     return request.get('/v2-car-getMasterBrandList.html');
 }
+
+// 获取车系数据
+export let getSerialList = (MasterID: number) => {
+    return request.get('/v2-car-getMakeListByMasterBrandId.html', {params: {MasterID}});
+}

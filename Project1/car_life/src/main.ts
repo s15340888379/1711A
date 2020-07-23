@@ -7,7 +7,11 @@ import './registerServiceWorker';
 import '@/scss/_reset.scss';
 // 引入composition-api
 import CompositionApi from '@vue/composition-api'
+// 引入vant
+import Vant from 'vant';
+import 'vant/lib/index.css';
 
+Vue.use(Vant);
 Vue.use(CompositionApi)
 Vue.config.productionTip = false;
 

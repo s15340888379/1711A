@@ -13,6 +13,9 @@
   text-align: center;
   color: #2c3e50;
 }
+html,body{
+  height: 100%;
+}
 html{
   font-size: calc(100vw / 750 * 100);
 }
