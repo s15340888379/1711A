@@ -14,15 +14,7 @@
     </div>
 
     <!-- 品牌字母导航 -->
-    <div
-      class="sidebar"
-      ref="sidebar"
-      @touchstart="touchStart"
-      @touchmove="touchMove"
-      @touchend="touchEnd"
-    >
-      <li v-for="(item) in letters" :key="item">{{item}}</li>
-    </div>
+    <letter-nav :letters="letters" @changeLetter="(newLetter)=>letter=newLetter"></letter-nav>
 
     <!-- 车系列表 -->
     <!-- <van-popup
@@ -43,9 +35,9 @@
           </li>
         </ul>
       </div>
-    </van-popup> -->
-    
-    <popup class="car-type" v-if="showSerial">
+    </van-popup>-->
+
+    <popup class="car-type" v-if="showSerial" @close="showSerial=false">
       <div v-for="(item) in serialList" :key="item.GroupId">
         <p>{{item.GroupName}}</p>
         <ul>
@@ -59,9 +51,6 @@
         </ul>
       </div>
     </popup>
-
-    <!-- 当前触摸的元素 -->
-    <span class="fixed" v-show="letter!==-1">{{letters[letter]}}</span>
   </div>
 </template>
 
@@ -78,98 +67,64 @@ import {
 import { IBrandItem, ISerialItem } from "@/util/interface";
 import { mapState } from "vuex";
 import popup from "@/components/popup.vue";
+import letterNav from "@/components/letterNav.vue";
 
-interface IData {
-  brandList: IBrandItem[];
-  letters: string[];
-  letter: number;
-  showSerial: boolean;
-  // serialList: ISerialItem[]
-}
+import useBrand from "@/hooks/useBrand";
 
 export default defineComponent({
   name: "Home",
-  computed: {
-    ...mapState({
-      serialList: (state: any) => state.home.serialList,
-    }),
-  },
   components: {
     popup,
+    letterNav,
   },
   setup(props, { root }) {
-    const sidebar = ref();
+    // 获取wrap dom结点
     const wrap = ref();
-    const data: UnwrapRef<IData> = reactive({
-      brandList: root.$store?.state.home.brandList,
-      letters: root.$store?.state.home.letters,
-      // serialList: root.$store?.state.home.serialList,
-      letter: -1,
-      showSerial: false,
-      lockScroll: false,
-      overlay: false,
-    });
+    // 获取当前选择的字母
+    const letter = ref(-1);
+    // 是否显示侧边栏
+    const showSerial = ref(false);
+    const {
+      brandList,
+      letters,
+      serialList,
+      getBrandListAction,
+      getSerialListAction,
+    } = useBrand();
+    // 记录上一次的matserId
+    let masterID: number = 0;
 
-    watch([() => data.letter], ([newVal], [oldVal]) => {
+    watch([letter], ([newVal], [oldVal]) => {
       if (newVal !== -1) {
-        let offsetTop = (document.querySelector(
-          `#${data.letters[data.letter]}`
+        const offsetTop = (document.querySelector(
+          `#${letters.value[letter.value]}`
         ) as HTMLDivElement)?.offsetTop;
         wrap.value.scrollTop = offsetTop;
       }
     });
 
-    function getBrandList() {
-      root.$store?.dispatch("home/getBrandList");
-    }
-
+    // 获取品牌数据
     onMounted(() => {
-      getBrandList();
+      getBrandListAction();
     });
 
-    function touchStart({ touches }: TouchEvent) {
-      let { pageY } = touches[0];
-      let pos = getPosition(pageY);
-      data.letter = pos;
-    }
-
-    function touchMove({ touches }: TouchEvent) {
-      let { pageY } = touches[0];
-      let pos = getPosition(pageY);
-      data.letter = pos;
-    }
-
-    function touchEnd(e: TouchEvent) {
-      data.letter = -1;
-    }
-
-    function getPosition(pageY: number) {
-      let sidebarHeight = sidebar.value?.clientHeight;
-      let index = Math.floor(
-        (pageY - (window.innerHeight - sidebarHeight) / 2) /
-          (sidebarHeight / data.letters.length)
-      );
-      if (index < 0) {
-        index = 0;
-      }
-      if (index > data.letters.length - 1) {
-        index = data.letters.length - 1;
-      }
-      return index;
-    }
-
     function clickBrand(MasterID: number) {
-      data.showSerial = true;
-      root.$store?.dispatch("home/getSerialList", MasterID);
+      if (masterID === MasterID) {
+        return;
+      } else {
+        showSerial.value = true;
+        getSerialListAction(MasterID);
+        masterID = MasterID;
+      }
     }
 
     return {
-      ...toRefs(data),
-      sidebar,
+      brandList,
+      letters,
+      letter,
+      serialList,
+      showSerial,
       wrap,
-      touchStart,
-      touchMove,
-      touchEnd,
       clickBrand,
     };
   },
@@ -179,6 +134,7 @@ export default defineComponent({
 <style lang="scss">
 @import "../scss/_variable.scss";
 @import "../scss/_mixin.scss";
+
 .home {
   height: 100%;
 }
@@ -211,33 +167,6 @@ export default defineComponent({
   li:last-child:after {
     display: none;
   }
-}
-
-.sidebar {
-  position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 0;
-  li {
-    font-size: $base-size-s;
-    color: $letter-list-color;
-    font-weight: 500;
-    padding: 0.02rem 0.1rem 0.1rem 0.3rem;
-  }
-}
-.fixed {
-  font-size: $base-size-xxl;
-  width: 1rem;
-  height: 1rem;
-  line-height: 1rem;
-  color: #fff;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 0.1rem;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .car-type {

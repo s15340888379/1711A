@@ -1,6 +1,6 @@
 import { getBrandList } from '@/api/home'
 import {ActionContext} from 'vuex'
-import {IBrandItem,ISerialItem} from '@/util/interface'
+import {IBrandItem, ISerialItem} from '@/util/interface'
 import { getSerialList } from '../../api/home';
 
 const state = {
@@ -12,7 +12,7 @@ const state = {
 const mutations = {
     updateBrandList(state: any, payload: IBrandItem[]) {
         let letters = [];
-        let brandList:any = {};
+        const brandList: any = {};
         // 通过map拿到每个品牌的首字母
         letters = payload.map((item) => item.Spelling[0]);
         // 去重
