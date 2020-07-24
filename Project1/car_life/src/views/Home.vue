@@ -41,13 +41,13 @@
       <div v-for="(item) in serialList" :key="item.GroupId">
         <p>{{item.GroupName}}</p>
         <ul>
-          <li v-for="(value) in item.GroupList" :key="value.SerialID">
+          <router-link tag="li" :to="`/detail/${value.SerialID}`" v-for="(value) in item.GroupList" :key="value.SerialID">
             <img :src="value.Picture" alt />
             <div>
               <p>{{value.AliasName}}</p>
               <p>{{value.DealerPrice}}</p>
             </div>
-          </li>
+          </router-link>
         </ul>
       </div>
     </popup>
@@ -118,6 +118,10 @@ export default defineComponent({
       }
     }
 
+    function clickSerial(SerialID: number) {
+      root.$router.push(`/detail/${SerialID}`);
+    }
+
     return {
       brandList,
       letters,
@@ -126,6 +130,7 @@ export default defineComponent({
       showSerial,
       wrap,
       clickBrand,
+      clickSerial
     };
   },
 });
