@@ -76,7 +76,7 @@
     font-size: 0.3rem;
 }
 
-@mixin border1px($direction: 'bottom') {
+@mixin border1px($direction: 'bottom', $border-color-base: '#ccc') {
     position: relative;
     @if $direction==top {
         &::after {
