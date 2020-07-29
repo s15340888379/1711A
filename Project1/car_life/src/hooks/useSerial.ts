@@ -1,5 +1,5 @@
 import { reactive, toRefs, computed, UnwrapRef, watch, onMounted } from '@vue/composition-api'
-import { getSerialDetail } from '../api/detail';
+import { getSerialDetail } from '../api/index';
 
 interface IData {
     serialDetail: {

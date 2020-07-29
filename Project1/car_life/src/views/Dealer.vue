@@ -12,22 +12,30 @@
     <transition name="slideup">
         <car-type v-if="showCarType" :selectCar="selectCar"></car-type>
     </transition>
-
+    
+    <transition name="slideup">
+        <location></location>
+    </transition>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, ref, Ref, reactive, toRef, toRefs } from '@vue/composition-api';
 import useSerial from '../hooks/useSerial';
+import useLocation from '../hooks/useLocation';
 import CarType from '@/components/carType.vue'
+import Location from '@/components/location.vue'
+
 
 export default defineComponent({
     components: {
-        CarType
+        CarType,
+        Location
     },
     setup(props, {root}) {
         const {$route: {params: {id}}} = root;
         const {getCarDetailAction , carDetail, serialDetail} = useSerial();
+        const {getLocationAction} = useLocation();
         const showCarType: Ref<boolean> = ref(false)
         const data = reactive({
             car: {},
@@ -36,6 +44,7 @@ export default defineComponent({
 
         onMounted(() => {
             getCarDetailAction(id);
+            getLocationAction();
         })
 
         function showSelectCar() {

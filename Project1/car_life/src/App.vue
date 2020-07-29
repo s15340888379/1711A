@@ -4,7 +4,7 @@
 
 
 <style lang="scss">
-@import './scss/_mixin.scss';
+@import "./scss/_mixin.scss";
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -13,25 +13,58 @@
   text-align: center;
   color: #2c3e50;
 }
-html,body{
+html,
+body {
   height: 100%;
 }
-html{
+html {
   font-size: calc(100vw / 750 * 100);
 }
-body{
-  font-size: .16rem;
+body {
+  font-size: 0.16rem;
   // @include grayscale()
 }
 
 // 过渡组件样式
-.slideup-enter, .slideup-leave-to{
+.slideup-enter,
+.slideup-leave-to {
   transform: translateY(100%);
 }
-.slideup-enter-to, .slideup-leave{
+.slideup-enter-to,
+.slideup-leave {
   transform: translateY(0);
 }
-.slideup-enter-active, .slideup-leave-active{
-  transition: transform .3s linear;
+.slideup-enter-active,
+.slideup-leave-active {
+  transition: transform 0.3s linear;
+}
+
+.slideleft-enter,
+.slideleft-leave-to {
+  .list {
+    transform: translateX(100%);
+  }
+  .mask {
+    opacity: 0;
+  }
+}
+.slideleft-enter-to,
+.slideleft-leave {
+  .list {
+    transform: translateX(0);
+  }
+  .mask {
+    opacity: 1;
+  }
+}
+.slideleft-enter-active,
+.slideleft-leave-active {
+  transition: all .3s linear;
+  .list {
+    transition: transform .3s linear;
+  }
+  .mask {
+    transition: opacity .3s linear;
+  }
 }
 </style>
