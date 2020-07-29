@@ -4,6 +4,8 @@ import VueRouter, { RouteConfig } from 'vue-router';
 // 引入路由组件
 import Home from '@/views/Home.vue';
 import Detail from '@/views/Detail.vue';
+import Dealer from '@/views/Dealer.vue';
+
 
 
 Vue.use(VueRouter);
@@ -14,9 +16,13 @@ const routes: RouteConfig[] = [
     name: 'Home',
     component: Home,
   }, {
-    path: '/detail/:id',
+    path: '/detail/:id?',
     name: 'Detail',
     component: Detail
+  }, {
+    path: '/dealer/:id?',
+    name: 'Dealer',
+    component: Dealer
   }
   // {
   //   path: '/about',

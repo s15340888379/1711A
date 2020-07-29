@@ -136,7 +136,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../scss/_variable.scss";
 @import "../scss/_mixin.scss";
 

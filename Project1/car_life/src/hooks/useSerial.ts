@@ -1,4 +1,4 @@
-import { reactive, toRefs, computed, UnwrapRef, watch } from '@vue/composition-api'
+import { reactive, toRefs, computed, UnwrapRef, watch, onMounted } from '@vue/composition-api'
 import { getSerialDetail } from '../api/detail';
 
 interface IData {
@@ -7,13 +7,15 @@ interface IData {
     },
     years: string[],
     curIndex: number,
-    // list: {}
+    carDetail: {}
 }
+const serialData = window.sessionStorage.getItem('serialData');
 export default () => {
     const data: UnwrapRef<IData> = reactive({
         serialDetail: {},
         years: ["全部"],
-        curIndex: 0
+        curIndex: 0,
+        carDetail: {}
     })
     const list = computed(() => {
         const curYear = data.years[data.curIndex];
@@ -26,6 +28,12 @@ export default () => {
         }
         list = sortSerialList(list);
         return mergeSerialList(list)
+    })
+
+    onMounted(() => {
+        if (serialData) {
+            data.serialDetail = JSON.parse(serialData);
+        }
     })
 
     watch([() => data.serialDetail], () => {
@@ -44,7 +52,12 @@ export default () => {
         const result = await getSerialDetail(SerialId)
         if (result.data) {
             data.serialDetail = result.data
+            window.sessionStorage.setItem('serialData', JSON.stringify(result.data));
         }
+    }
+
+    function getCarDetailAction(carId: string) {
+        data.carDetail = data.serialDetail.list.filter((item: any) => item.car_id === carId)[0]
     }
 
     function sortSerialList(list: any[]) {
@@ -85,7 +98,8 @@ export default () => {
         ...toRefs(data),
         list,
         changeCurIndex,
-        getSerialDetailAction
+        getSerialDetailAction,
+        getCarDetailAction
     }
 }
 

@@ -23,4 +23,15 @@ body{
   font-size: .16rem;
   // @include grayscale()
 }
+
+// 过渡组件样式
+.slideup-enter, .slideup-leave-to{
+  transform: translateY(100%);
+}
+.slideup-enter-to, .slideup-leave{
+  transform: translateY(0);
+}
+.slideup-enter-active, .slideup-leave-active{
+  transition: transform .3s linear;
+}
 </style>
