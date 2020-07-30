@@ -2,7 +2,7 @@
     <div class="location">
         <section>
             <p>自动定位</p>
-            <p>{{current.CityName}}</p>
+            <p  @click="clickCity(current)">{{current.CityName}}</p>
         </section>
         <section>
             <p>省份</p>
@@ -15,7 +15,7 @@
             <section class="city" v-if="showCityList">
                 <div class="mask" @click.self="showCityList=false"></div>
                 <ul class="list">
-                    <li v-for="(item) in cityList" :key="item.CityID" @click="clickCity">{{item.CityName}}</li>
+                    <li v-for="(item) in cityList" :key="item.CityID" @click="clickCity(item)">{{item.CityName}}</li>
                 </ul>
             </section>
         </transition>
@@ -27,7 +27,7 @@ import { defineComponent, onMounted, ref } from '@vue/composition-api';
 import useLocation from '@/hooks/useLocation'
 
 export default defineComponent({
-  setup() {
+  setup(props, {emit}) {
     const {provinceList, cityList, getCityListAction, current} = useLocation();
     const showCityList = ref(false)
 
@@ -41,12 +41,17 @@ export default defineComponent({
 
     }
 
+    function clickCity(city: {}) {
+        emit('select', city);
+    }
+
     return {
         provinceList,
         cityList,
         showCityList,
         current,
-        clickProvince
+        clickProvince,
+        clickCity
     }
   }
 })
@@ -82,20 +87,7 @@ section p:last-child, section li{
 }
 section li{
     @include border1px();
-    &:before{
-        content: '';
-        display: inline-block;
-        width: .2rem;
-        height: .2rem;
-        border-top: none;
-        border-right: 1px solid #ccc;
-        border-bottom: 1px solid #ccc;
-        border-left: none;
-        transform: rotate(-45deg);
-        position: absolute;
-        right: .3rem;
-        top: .25rem;
-    }
+    @include arrow(right, .2rem, #ccc);
 }
 .city{
     background: transparent;
