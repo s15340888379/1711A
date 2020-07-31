@@ -1,10 +1,10 @@
 <template>
   <div v-if="Object.keys(serialDetail).length">
     <section class="header">
-      <div class="img">
+      <router-link tag="div" :to="`/img/${id}`" class="img">
         <img :src="serialDetail.CoverPhoto" alt />
         <span>{{serialDetail.pic_group_count}}张照片</span>
-      </div>
+      </router-link>
       <div class="price">
         <p>
           <span>{{serialDetail.market_attribute.dealer_price}}</span>
@@ -72,6 +72,7 @@ export default defineComponent({
     }
 
     return {
+      id,
       serialDetail,
       years,
       curIndex,
@@ -137,6 +138,9 @@ export default defineComponent({
     }
     .years .active{
       color: #3aacff;
+    }
+    .list{
+      margin-bottom: 1rem;
     }
     .list>p{
       padding: 0 .2rem;

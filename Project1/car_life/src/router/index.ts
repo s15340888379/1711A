@@ -5,7 +5,7 @@ import VueRouter, { RouteConfig } from 'vue-router';
 import Home from '@/views/Home.vue';
 import Detail from '@/views/Detail.vue';
 import Dealer from '@/views/Dealer.vue';
-
+import Img from '@/views/Img.vue';
 
 
 Vue.use(VueRouter);
@@ -23,6 +23,10 @@ const routes: RouteConfig[] = [
     path: '/dealer/:id?',
     name: 'Dealer',
     component: Dealer
+  }, {
+    path: '/img/:id?',
+    name: 'Img',
+    component: Img
   }
   // {
   //   path: '/about',
