@@ -34,3 +34,11 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - url params: ?a=1&b=2
 - headers: cookie: a=1;b=2
 - request body: form-data | x-www-form-urlencoded | json
+
+#### PR操作
+- fork项目
+- pull项目
+- modify项目
+- push项目
+- pull request
+- merge pull request
