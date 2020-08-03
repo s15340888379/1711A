@@ -149,9 +149,11 @@
         right: .3rem;
         top: 50%;
         @if $direction==top {
+            top: 60%;
             transform: rotate(-135deg) translateY(-50%);
         }
         @else if $direction==bottom {
+            top: 40%;
             transform: rotate(45deg) translateY(-50%);
            
         }

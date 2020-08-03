@@ -1,5 +1,5 @@
-import { reactive, toRefs } from '@vue/composition-api'
-import { getImageList } from '@/api';
+import { reactive, toRefs, watch } from '@vue/composition-api';
+import { getImageList, getModelImageYearColor } from '@/api';
 
 export default () => {
     const data = reactive({
@@ -18,10 +18,23 @@ export default () => {
         data.SerialID = SerialID;
     }
 
+    function setColorID(ColorID: string) {
+        data.ColorID = ColorID;
+    }
+
+    function setCarID(CarID: string) {
+        data.CarId = CarID;
+    }
+
+    watch([() => data.ColorID, () => data.CarId], () => {
+        console.log('data...', data);
+        getImageListAction();
+    })
+
     async function getImageListAction() {
         const params: any = {SerialID: data.SerialID};
         if (data.CarId) {
-            params.CarId = data.CarId;
+            params.CarID = data.CarId;
         }
         if (data.ColorID) {
             params.ColorID = data.ColorID;
@@ -32,9 +45,20 @@ export default () => {
         }
     }
 
+    async function getModelImageYearColorAction(SerialId: string) {
+        const result = await getModelImageYearColor(SerialId);
+        if (result.data) {
+            data.colorList = result.data;
+        }
+    }
+
+
     return {
         ...toRefs(data),
         setSerialID,
-        getImageListAction
+        setColorID,
+        setCarID,
+        getImageListAction,
+        getModelImageYearColorAction
     }
 }

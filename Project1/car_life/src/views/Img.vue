@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="wrap">
     <header>
-      <span @click="showCarColor=true">{{'颜色'}}</span>
+      <span @click="showCarColor=true">{{showColorText}}</span>
       <span>|</span>
-      <span @click="showCarType=true">{{'车型'}}</span>
+      <span @click="showCarType=true">{{showTypeText}}</span>
     </header>
-    <section>
+    <section v-if="imgList.length">
       <ul v-for="(item) in imgList" :key="item.Id">
         <li
           v-for="(value, key) in item.List"
@@ -19,15 +19,21 @@
         </li>
       </ul>
     </section>
+    <section v-else class="no-content">
+      <img src="http://h5.chelun.com/2017/official/img/no-img.png" />
+      <span>还没有内容</span>  
+    </section> 
 
     <!-- 车型选择组件 -->
     <transition name="slideup">
-      <car-type v-if="showCarType" :selectCar="selectCar"></car-type>
+      <car-type v-if="showCarType" :selectCar="selectCar">
+        <p class="all" @click="selectCar()">全部车款</p>
+      </car-type>
     </transition>
 
     <!-- 颜色选择组件 -->
     <transition name="slideup">
-      <car-type v-if="showCarColor" :selectCar="selectCar"></car-type>
+      <color-type v-if="showCarColor" :selectColor="selectColor"></color-type>
     </transition>
   </div>
 </template>
@@ -35,11 +41,13 @@
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref } from "@vue/composition-api";
 import CarType from "@/components/carType.vue";
+import ColorType from "@/components/colorType.vue";
 import useImg from "@/hooks/useImg";
 
 export default defineComponent({
   components: {
     CarType,
+    ColorType
   },
   setup(
     props,
@@ -51,20 +59,45 @@ export default defineComponent({
       },
     }
   ) {
-    const { getImageListAction, setSerialID, imgList } = useImg();
+    const { getImageListAction, setSerialID, imgList, setCarID, setColorID } = useImg();
     setSerialID(id);
     getImageListAction();
     const showCarType: Ref<boolean> = ref(false);
     const showCarColor: Ref<boolean> = ref(false);
+    const showTypeText: Ref<string> = ref('车款');
+    const showColorText: Ref<string> = ref('全部颜色');
 
-    function showSelectCar() {}
+    function selectCar(item: any) {
+      showCarType.value = false;
+      console.log('item...', item);
+      if (item) {
+        showTypeText.value = `${item.market_attribute.year}款 ${item.car_name}`
+        setCarID(item.car_id);
+      } else {
+        showTypeText.value = '全部车款';
+        setCarID('')
+      }
+    }
 
-    function showSelectColor() {}
+    function selectColor(item: any) {
+      showCarColor.value = false;
+      if (item) {
+        setColorID(item.ColorId);
+        showColorText.value = item.Name
+      } else {
+        setColorID('');
+        showColorText.value = '全部颜色'
+      }
+    }
 
     return {
       imgList,
       showCarType,
       showCarColor,
+      showTypeText,
+      showColorText,
+      selectCar,
+      selectColor,
     };
   },
 });
@@ -72,7 +105,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import "../scss/_mixin.scss";
-
+.wrap{
+  background: #f4f4f4;
+  min-height: 100%;
+}
 header {
   position: fixed;
   background: #fff;
@@ -83,12 +119,17 @@ header {
   @include flex(row, space-between, center);
   span:first-child,
   span:last-child {
-    width: 48%;
+    width: 40%;
     height: 100%;
-    line-height: 0.8rem;
     text-align: center;
-    @include arrow(bottom, 0.3rem, #ccc);
+    line-height: 1.3;
+    @include arrow(bottom, 0.2rem, #aaa);
+    padding-right: .5rem;
+    @include flex(row, center, center);
   }
+}
+section:nth-child(2){
+  padding-top: .8rem;
 }
 ul {
   display: flex;
@@ -122,5 +163,25 @@ li {
   background-size: cover;
   background-position: center;
   margin-top: 0.06rem;
+}
+.all{
+    margin: .15rem 0;
+    font-size: .34rem;
+    color: #00afff;
+    background: #fff;
+    text-align: center;
+    line-height: .8rem;
+    height: .8rem;
+}
+.no-content{
+  @include flex(column, center, center);
+  img{
+    margin-top: 1.2rem;
+    width: 1.74rem;
+  }
+  span{
+    margin-top: .3rem;
+    color: silver;
+  }
 }
 </style>

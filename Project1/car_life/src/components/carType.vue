@@ -1,5 +1,6 @@
 <template>
   <div class="car-type">
+    <slot></slot>
     <section class="years" @click="changeYear">
       <span
         v-for="(item, index) in years.slice(1)"
@@ -79,11 +80,15 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   overflow-y: scroll;
-  background: #fff;
+  background: #f4f4f4;
+  z-index: 1000;
 }
 .car-type > div {
   width: 100%;
   height: 100%;
+}
+.years{
+  background: #fff;
 }
 .years span {
   font-size: 0.32rem;
@@ -92,6 +97,9 @@ export default defineComponent({
 }
 .years .active {
   color: #3aacff;
+}
+.list{
+  background: #fff;
 }
 .list > p {
   padding: 0 0.2rem;

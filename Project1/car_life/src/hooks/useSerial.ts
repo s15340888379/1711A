@@ -9,8 +9,8 @@ interface IData {
     curIndex: number,
     carDetail: {}
 }
-const serialData = window.sessionStorage.getItem('serialData');
 export default () => {
+    const serialData = window.sessionStorage.getItem('serialData');
     const data: UnwrapRef<IData> = reactive({
         serialDetail: {},
         years: ["全部"],
